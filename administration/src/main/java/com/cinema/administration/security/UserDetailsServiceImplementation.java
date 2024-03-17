@@ -1,4 +1,4 @@
-package com.cinema.administration.controller;
+package com.cinema.administration.security;
 
 import com.cinema.administration.domain.CinemaHall;
 import com.cinema.administration.repository.CinemaHallRepository;
