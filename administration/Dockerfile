@@ -9,6 +9,6 @@ FROM amazoncorretto:21.0.2-alpine
 WORKDIR /app
 COPY --from=build /app/build/libs/administration-0.0.1-SNAPSHOT.jar /app/administration-0.0.1-SNAPSHOT.jar
 
-EXPOSE 8081
+EXPOSE 8080
 
 CMD ["java", "-jar", "administration-0.0.1-SNAPSHOT.jar"]

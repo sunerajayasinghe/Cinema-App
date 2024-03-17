@@ -2,7 +2,7 @@ package com.cinema.administration.security;
 
 import com.cinema.administration.domain.CinemaHall;
 import com.cinema.administration.repository.CinemaHallRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,14 +13,10 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserDetailsServiceImplementation implements UserDetailsService {
 
     private final CinemaHallRepository cinemaHallRepository;
-
-    @Autowired
-    public UserDetailsServiceImplementation(CinemaHallRepository cinemaHallRepository) {
-        this.cinemaHallRepository = cinemaHallRepository;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

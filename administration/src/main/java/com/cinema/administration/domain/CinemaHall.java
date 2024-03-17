@@ -26,7 +26,10 @@ public class CinemaHall {
     private String password;
 
     @Column(name = "email_address", nullable = false)
-    String emailAddress;
+    private String emailAddress;
+
+    @Column(name = "cinema_hall_name", nullable = false)
+    private String cinemaHallName;
 
     @Column(name = "mobile_number", nullable = false)
     private String mobileNumber;
