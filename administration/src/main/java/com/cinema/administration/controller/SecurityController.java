@@ -25,34 +25,19 @@ public class SecurityController {
     @PostMapping(path = "/register")
     public ResponseEntity<TokenPayload> registerCinemaHall(@RequestBody RegisterRequest registerRequest) {
         TokenPayload tokenPayload = securityService.registerCinemaHall(registerRequest);
-
-        if (tokenPayload != null) {
-            return new ResponseEntity<>(tokenPayload, HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
-        }
+        return new ResponseEntity<>(tokenPayload, HttpStatus.CREATED);
     }
 
     @PostMapping(path = "login")
     public ResponseEntity<TokenPayload> loginCinemaHall(@RequestBody LoginRequest loginRequest) {
         TokenPayload tokenPayload = securityService.loginCinemaHall(loginRequest);
-
-        if (tokenPayload != null) {
-            return new ResponseEntity<>(tokenPayload, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(tokenPayload, HttpStatus.OK);
     }
 
     @GetMapping(path = "/")
     public ResponseEntity<CinemaHallPayload> getCinemaHall(Authentication authentication) {
         CinemaHallPayload cinemaHallPayload = securityService.getCinemaHall(authentication);
-
-        if (cinemaHallPayload != null) {
-            return new ResponseEntity<>(cinemaHallPayload, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(cinemaHallPayload, HttpStatus.OK);
     }
 
 }

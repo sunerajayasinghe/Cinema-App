@@ -1,10 +1,10 @@
 package com.cinema.administration.service;
 
+import com.cinema.administration.domain.CinemaHall;
 import com.cinema.administration.payload.CinemaHallPayload;
 import com.cinema.administration.payload.LoginRequest;
 import com.cinema.administration.payload.RegisterRequest;
 import com.cinema.administration.payload.TokenPayload;
-import com.cinema.administration.domain.CinemaHall;
 import com.cinema.administration.repository.CinemaHallRepository;
 import com.cinema.administration.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,10 +25,10 @@ public class SecurityService {
     private final PasswordEncoder passwordEncoder;
 
     public TokenPayload registerCinemaHall(RegisterRequest registerRequest) {
-        Optional<CinemaHall> cinemaHallOptional = cinemaHallRepository.findCinemaHallByEmailAddress(registerRequest.emailAddress());
-        if (cinemaHallOptional.isPresent()) {
-            return null;
-        }
+        cinemaHallRepository.findCinemaHallByEmailAddress(registerRequest.emailAddress())
+                .ifPresent(duplicatCinemaHall -> {
+                    throw new IllegalArgumentException();
+                });
 
         CinemaHall cinemaHall = new CinemaHall();
         cinemaHall.setEmailAddress(registerRequest.emailAddress());
@@ -43,21 +41,12 @@ public class SecurityService {
     }
 
     public TokenPayload loginCinemaHall(LoginRequest loginRequest) {
-        Optional<CinemaHall> cinemaHallOptional = cinemaHallRepository.findCinemaHallByEmailAddress(loginRequest.emailAddress());
-        if (cinemaHallOptional.isEmpty()) {
-            return null;
-        }
-
+        cinemaHallRepository.findCinemaHallByEmailAddress(loginRequest.emailAddress()).orElseThrow();
         return getTokenResponseResponseData(loginRequest.emailAddress(), loginRequest.password());
     }
 
     public CinemaHallPayload getCinemaHall(Authentication authentication) {
-        Optional<CinemaHall> cinemaHallOptional = cinemaHallRepository.findCinemaHallByEmailAddress(authentication.getName());
-        if (cinemaHallOptional.isEmpty()) {
-            return null;
-        }
-
-        CinemaHall cinemaHall = cinemaHallOptional.get();
+        CinemaHall cinemaHall = cinemaHallRepository.findCinemaHallByEmailAddress(authentication.getName()).orElseThrow();
         return new CinemaHallPayload(cinemaHall.getEmailAddress(), cinemaHall.getMobileNumber(), cinemaHall.getCinemaHallName());
     }
 
