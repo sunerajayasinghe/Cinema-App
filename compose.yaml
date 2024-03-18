@@ -6,6 +6,15 @@ services:
       POSTGRES_DB: cinema
     ports:
       - "5432:5432/tcp"
+  
+  fanside-db:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: fanside
+      MYSQL_ROOT_PASSWORD: Danuraha@1999
+    ports:
+      - "3306:3306/tcp"
+
   administration-api:
     build:
       context: ./administration
