@@ -14,3 +14,9 @@ services:
       - "8080:8080"
     depends_on:
       - postgres
+  administration-frontend:
+    build:
+      context: ./cinema-admin
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
