@@ -1,5 +1,5 @@
 package com.cinema.administration.payload;
 
-public record CinemaHallPayload(String emailAddress, String mobileNumber, String cinemaHallName) {
+public record CinemaHallPayload(Long id, String emailAddress, String mobileNumber, String cinemaHallName) {
 
 }

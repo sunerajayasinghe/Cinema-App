@@ -1,5 +1,8 @@
 package com.cinema.administration.payload;
 
-public record LoginRequest(String emailAddress, String password) {
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
+public record LoginRequest(@NotBlank @Email String emailAddress, @NotBlank String password) {
 
 }

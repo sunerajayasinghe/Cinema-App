@@ -7,11 +7,11 @@ import com.cinema.administration.payload.RegisterRequest;
 import com.cinema.administration.payload.TokenPayload;
 import com.cinema.administration.repository.CinemaHallRepository;
 import com.cinema.administration.security.JwtUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +24,7 @@ public class SecurityService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     public TokenPayload registerCinemaHall(RegisterRequest registerRequest) {
         cinemaHallRepository.findCinemaHallByEmailAddress(registerRequest.emailAddress())
                 .ifPresent(duplicatCinemaHall -> {
@@ -47,24 +48,16 @@ public class SecurityService {
 
     public CinemaHallPayload getCinemaHall(Authentication authentication) {
         CinemaHall cinemaHall = cinemaHallRepository.findCinemaHallByEmailAddress(authentication.getName()).orElseThrow();
-        return new CinemaHallPayload(cinemaHall.getEmailAddress(), cinemaHall.getMobileNumber(), cinemaHall.getCinemaHallName());
+        return new CinemaHallPayload(cinemaHall.getId(), cinemaHall.getEmailAddress(), cinemaHall.getMobileNumber(), cinemaHall.getCinemaHallName());
     }
 
     private TokenPayload getTokenResponseResponseData(String emailAddress, String password) {
-        Authentication authentication = setAuthentication(emailAddress, password);
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(emailAddress, password));
 
         String jwtToken = jwtUtil.generateJwtToken(authentication);
 
         return new TokenPayload(jwtToken);
-    }
-
-    private Authentication setAuthentication(String emailAddress, String password) {
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(emailAddress, password));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        return authentication;
     }
 
 }
