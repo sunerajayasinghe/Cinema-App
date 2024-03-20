@@ -48,7 +48,7 @@ public class SecurityService {
 
     public CinemaHallPayload getCinemaHall(Authentication authentication) {
         CinemaHall cinemaHall = cinemaHallRepository.findCinemaHallByEmailAddress(authentication.getName()).orElseThrow();
-        return new CinemaHallPayload(cinemaHall.getEmailAddress(), cinemaHall.getMobileNumber(), cinemaHall.getCinemaHallName());
+        return new CinemaHallPayload(cinemaHall.getId(), cinemaHall.getEmailAddress(), cinemaHall.getMobileNumber(), cinemaHall.getCinemaHallName());
     }
 
     private TokenPayload getTokenResponseResponseData(String emailAddress, String password) {
