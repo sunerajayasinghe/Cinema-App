@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option java_multiple_files = true;
+option java_package = "com.example.administration.proto";
+
+service MovieDetails {
+  rpc SendMovieDetails (google.protobuf.Empty) returns (MovieList) {}
+}
+
+message MovieList {
+  repeated MoviePayload moviePayload = 1;
+}
+
+message MoviePayload {
+  int64 id = 1;
+  string movieName = 2;
+  CinemaHallPayload cinemaHall = 3;
+  repeated ShowTime showTimes = 4;
+}
+
+message CinemaHallPayload {
+  int64 id = 1;
+  string emailAddress = 2;
+  string mobileNumber = 3;
+  string cinemaHallName = 4;
+}
+
+message ShowTime {
+  int64 id = 1;
+  google.protobuf.Timestamp showStartTime = 2;
+  google.protobuf.Timestamp showEndTime = 3;
+}

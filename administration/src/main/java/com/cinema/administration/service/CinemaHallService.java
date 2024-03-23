@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,16 +38,17 @@ public class CinemaHallService {
     public ResponseEntity<HttpStatusCode> addMovie(MovieRequest movieRequest) {
         CinemaHall cinemaHall = cinemaHallRepository.findById(movieRequest.cinemaHallId()).orElseThrow();
 
+        Movie movie = new Movie();
+
         List<ShowTime> showTimes = movieRequest.showTimes().stream()
                 .map(showTimeRequest -> {
                     ShowTime showTime = new ShowTime();
                     showTime.setShowStartTime(showTimeRequest.showStartTime());
                     showTime.setShowEndTime(showTimeRequest.showEndTime());
+                    showTime.setMovie(movie);
                     return showTime;
-                })
-                .collect(Collectors.toList());
+                }).toList();
 
-        Movie movie = new Movie();
         movie.setCinemaHall(cinemaHall);
         movie.setMovieName(movieRequest.movieName());
         movie.setShowTimes(showTimes);
@@ -56,7 +56,6 @@ public class CinemaHallService {
         movieRepository.save(movie);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
-
     }
 
 }
